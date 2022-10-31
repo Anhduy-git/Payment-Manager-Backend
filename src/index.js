@@ -3,7 +3,7 @@ const connectDB = require('./db/db-connect');
 const errorHandlerMiddleware = require('./middlewares/error-handler');
 const route = require('./routers');
 const cors = require('cors');
-require('dotenv').config();
+const config = require('./config')
 
 
 const app = express();
@@ -22,15 +22,16 @@ route(app);
 app.use(errorHandlerMiddleware); 
 
 
-const port = process.env.PORT;
+const port = config.port;
+console.log(port);
 const startServer = async () => {    
     try {
-		await(connectDB(process.env.MONGODB_URL));      
+		await(connectDB(config.mongodb_url));      
 		app.listen(port, () =>
 			console.log(`Server is listening on port ${port}...`)
 		);    
 	} catch(err) {
-		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: "Internal Server Error" });
+		console.log(err);
 	}
 };
   

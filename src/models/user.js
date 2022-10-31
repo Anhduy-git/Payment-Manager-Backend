@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {BadRequestError, UnauthorizedError} = require('../errors');
-require('dotenv').config();
-
+const config = require('../config');
 const userSchema = new mongoose.Schema({      
     isAdmin: {
         type: Boolean,        
@@ -49,7 +48,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = async function() {
     const user = this;
-    const token = jwt.sign({_id: user._id.toString()}, process.env.JWT_SECRET);
+    const token = jwt.sign({_id: user._id.toString()}, config.jwt_secret);
     user.tokens = user.tokens.concat({token});
     await user.save();
     return token;
